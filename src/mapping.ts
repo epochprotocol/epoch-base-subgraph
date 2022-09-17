@@ -7,60 +7,70 @@ import {
   JobParamsEvent,
   MetaTransactionExecuted
 } from "../generated/EpochBase/EpochBase"
-import { ExampleEntity } from "../generated/schema"
+import { JobExecutionEventEntity, JobInfoEventEntity, JobParamsEventEntity } from "../generated/schema"
 
 export function handleExpireJobEvent(event: ExpireJobEvent): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
+  let entity = JobExecutionEventEntity.load(event.params.id.toHex())
 
   // Entities only exist after they have been saved to the store;
   // `null` checks allow to create entities on demand
   if (entity == null) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
-
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
+    entity = new JobExecutionEventEntity(event.params.id.toHex())
   }
-
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
-
-  // Entity fields can be set based on event parameters
-  entity.id = event.params.id
-
-  // Entities can be written to the store with `.save()`
+  entity.isExpired = true;
   entity.save()
-
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
-
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // - contract.getNonce(...)
-  // - contract.jobCounter(...)
-  // - contract.jobInfo(...)
-  // - contract.jobParams(...)
-  // - contract.jobs(...)
-  // - contract.protocolModules(...)
 }
 
-export function handleJobExecutionEvent(event: JobExecutionEvent): void {}
+export function handleJobExecutionEvent(event: JobExecutionEvent): void {
+  let entity = JobExecutionEventEntity.load(event.params.id.toHex())
 
-export function handleJobInfoEvent(event: JobInfoEvent): void {}
+  // Entities only exist after they have been saved to the store;
+  // `null` checks allow to create entities on demand
+  if (entity == null) {
+    entity = new JobExecutionEventEntity(event.params.id.toHex())
+  }
+  var success: String = event.params.success ? "True" : "False";
+  entity.success = entity.success == null ? "" : entity.success + "-" + success;
+  entity.data = event.params.data;
+  entity.nextExecution = entity.nextExecution == null ? "" : entity.nextExecution + "-" + event.params.nextExecution.toString();
+  entity.isExpired = event.params.isExpired;
+  entity.save()
+}
 
-export function handleJobParamsEvent(event: JobParamsEvent): void {}
+export function handleJobInfoEvent(event: JobInfoEvent): void {
+  let entity = JobInfoEventEntity.load(event.params.id.toHex())
+
+  // Entities only exist after they have been saved to the store;
+  // `null` checks allow to create entities on demand
+  if (entity == null) {
+    entity = new JobInfoEventEntity(event.params.id.toHex())
+  }
+
+  entity.executionInterval = event.params.executionInterval;
+  entity.strictExecution = event.params.strictExecution;
+  entity.jobInfoData = event.params.jobInfoData;
+  entity.save()
+
+}
+
+export function handleJobParamsEvent(event: JobParamsEvent): void {
+  let entity = JobParamsEventEntity.load(event.params.id.toHex())
+
+  // Entities only exist after they have been saved to the store;
+  // `null` checks allow to create entities on demand
+  if (entity == null) {
+    entity = new JobParamsEventEntity(event.params.id.toHex())
+  }
+
+  entity.data = event.params.data;
+  entity.executionContract = event.params.executionContract;
+  entity.functionSignature = event.params.functionSignature;
+  entity.tokensInvolved = event.params.tokensInvolved.join("-");
+  entity.initiatorAddress = event.params.initiatorAddress;
+
+  entity.save()
+}
 
 export function handleMetaTransactionExecuted(
   event: MetaTransactionExecuted
-): void {}
+): void { }

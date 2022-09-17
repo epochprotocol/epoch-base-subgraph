@@ -1,0 +1,36 @@
+specVersion: 0.0.2
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: EpochBase
+    network: mainnet
+    source:
+      address: "0xc6845a5c768bf8d7681249f8927877efda425baf"
+      abi: EpochBase
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - ExpireJobEvent
+        - JobExecutionEvent
+        - JobInfoEvent
+        - JobParamsEvent
+        - MetaTransactionExecuted
+      abis:
+        - name: EpochBase
+          file: EpochBase/abis/EpochBase.json
+      eventHandlers:
+        - event: ExpireJobEvent(indexed uint256)
+          handler: handleExpireJobEvent
+        - event: JobExecutionEvent(indexed uint256,indexed bool,indexed bool,uint256,bytes)
+          handler: handleJobExecutionEvent
+        - event: JobInfoEvent(indexed uint256,indexed uint256,indexed bool,bytes)
+          handler: handleJobInfoEvent
+        - event: JobParamsEvent(indexed uint256,indexed address,indexed
+            address,bytes4,address[],bytes)
+          handler: handleJobParamsEvent
+        - event: MetaTransactionExecuted(address,address,bytes)
+          handler: handleMetaTransactionExecuted
+      file: EpochBase/EpochBase.wasm
