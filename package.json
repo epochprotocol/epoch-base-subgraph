@@ -1,0 +1,16 @@
+{
+  "name": "epoch-base",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ epoch-protocol/epoch-base",
+    "create-local": "graph create --node http://localhost:8020/ epoch-protocol/epoch-base",
+    "remove-local": "graph remove --node http://localhost:8020/ epoch-protocol/epoch-base",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 epoch-protocol/epoch-base"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.20.0",
+    "@graphprotocol/graph-ts": "0.20.0"
+  }
+}
