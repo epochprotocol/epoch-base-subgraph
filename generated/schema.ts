@@ -241,23 +241,6 @@ export class JobExecutionEventEntity extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get success(): string | null {
-    let value = this.get("success");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set success(value: string | null) {
-    if (value === null) {
-      this.unset("success");
-    } else {
-      this.set("success", Value.fromString(value as string));
-    }
-  }
-
   get isExpired(): boolean {
     let value = this.get("isExpired");
     return value.toBoolean();
@@ -265,23 +248,6 @@ export class JobExecutionEventEntity extends Entity {
 
   set isExpired(value: boolean) {
     this.set("isExpired", Value.fromBoolean(value));
-  }
-
-  get nextExecution(): string | null {
-    let value = this.get("nextExecution");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set nextExecution(value: string | null) {
-    if (value === null) {
-      this.unset("nextExecution");
-    } else {
-      this.set("nextExecution", Value.fromString(value as string));
-    }
   }
 
   get data(): Bytes | null {
@@ -298,6 +264,89 @@ export class JobExecutionEventEntity extends Entity {
       this.unset("data");
     } else {
       this.set("data", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get jobExecutionStatus(): Array<string> | null {
+    let value = this.get("jobExecutionStatus");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set jobExecutionStatus(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("jobExecutionStatus");
+    } else {
+      this.set(
+        "jobExecutionStatus",
+        Value.fromStringArray(value as Array<string>)
+      );
+    }
+  }
+}
+
+export class JobExecutionStatusEntity extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id !== null,
+      "Cannot save JobExecutionStatusEntity entity without an ID"
+    );
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save JobExecutionStatusEntity entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("JobExecutionStatusEntity", id.toString(), this);
+  }
+
+  static load(id: string): JobExecutionStatusEntity | null {
+    return store.get(
+      "JobExecutionStatusEntity",
+      id
+    ) as JobExecutionStatusEntity | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get success(): boolean {
+    let value = this.get("success");
+    return value.toBoolean();
+  }
+
+  set success(value: boolean) {
+    this.set("success", Value.fromBoolean(value));
+  }
+
+  get nextExecution(): BigInt | null {
+    let value = this.get("nextExecution");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextExecution(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextExecution");
+    } else {
+      this.set("nextExecution", Value.fromBigInt(value as BigInt));
     }
   }
 }

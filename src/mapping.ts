@@ -7,7 +7,7 @@ import {
   JobParamsEvent,
   MetaTransactionExecuted
 } from "../generated/EpochBase/EpochBase"
-import { JobExecutionEventEntity, JobInfoEventEntity, JobParamsEventEntity } from "../generated/schema"
+import { JobExecutionEventEntity, JobInfoEventEntity, JobParamsEventEntity, JobExecutionStatusEntity } from "../generated/schema"
 
 export function handleExpireJobEvent(event: ExpireJobEvent): void {
   let entity = JobExecutionEventEntity.load(event.params.id.toHex())
@@ -29,10 +29,19 @@ export function handleJobExecutionEvent(event: JobExecutionEvent): void {
   if (entity == null) {
     entity = new JobExecutionEventEntity(event.params.id.toHex())
   }
-  var success: String = event.params.success ? "True" : "False";
-  entity.success = entity.success == null ? "" : entity.success + "-" + success;
+
+  let jobStatus = new JobExecutionStatusEntity(event.params.id.toHex()+ event.params.nextExecution.toHex())
+  jobStatus.success = event.params.success;
+  jobStatus.nextExecution = event.params.nextExecution;
+  jobStatus.save();
+  var jobStatusList = entity.jobExecutionStatus;
+  if(jobStatusList == null){
+    jobStatusList = [jobStatus.id]
+  }else {
+    jobStatusList.push(jobStatus.id);
+  }
+  entity.jobExecutionStatus = jobStatusList;
   entity.data = event.params.data;
-  entity.nextExecution = entity.nextExecution == null ? "" : entity.nextExecution + "-" + event.params.nextExecution.toString();
   entity.isExpired = event.params.isExpired;
   entity.save()
 }

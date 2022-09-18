@@ -16,8 +16,13 @@ type JobParamsEventEntity @entity {
 
 type JobExecutionEventEntity @entity {
   id: ID!
-  success: String
   isExpired: Boolean
-  nextExecution: String 
   data: Bytes 
+  jobExecutionStatus: [JobExecutionStatusEntity!]
+}
+
+type JobExecutionStatusEntity @entity {
+  id: ID!
+  success: Boolean
+  nextExecution: BigInt 
 }
