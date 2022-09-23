@@ -86,40 +86,6 @@ export class JobInfoEventEntity extends Entity {
       this.set("jobInfoData", Value.fromBytes(<Bytes>value));
     }
   }
-}
-
-export class JobParamsEventEntity extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save JobParamsEventEntity entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type JobParamsEventEntity must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
-      );
-      store.set("JobParamsEventEntity", id.toString(), this);
-    }
-  }
-
-  static load(id: string): JobParamsEventEntity | null {
-    return changetype<JobParamsEventEntity | null>(
-      store.get("JobParamsEventEntity", id)
-    );
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
 
   get initiatorAddress(): Bytes | null {
     let value = this.get("initiatorAddress");

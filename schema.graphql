@@ -3,10 +3,6 @@ type JobInfoEventEntity @entity {
   executionInterval: BigInt
   strictExecution: Boolean
   jobInfoData: Bytes 
-}
-
-type JobParamsEventEntity @entity {
-  id: ID!
   initiatorAddress: Bytes
   executionContract: Bytes
   functionSignature: Bytes

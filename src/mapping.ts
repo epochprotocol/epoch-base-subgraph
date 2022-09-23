@@ -7,7 +7,7 @@ import {
   JobParamsEvent,
   MetaTransactionExecuted
 } from "../generated/EpochBase/EpochBase"
-import { JobExecutionEventEntity, JobInfoEventEntity, JobParamsEventEntity, JobExecutionStatusEntity } from "../generated/schema"
+import { JobExecutionEventEntity, JobInfoEventEntity, JobExecutionStatusEntity } from "../generated/schema"
 
 export function handleExpireJobEvent(event: ExpireJobEvent): void {
   let entity = JobExecutionEventEntity.load(event.params.id.toHex())
@@ -63,12 +63,12 @@ export function handleJobInfoEvent(event: JobInfoEvent): void {
 }
 
 export function handleJobParamsEvent(event: JobParamsEvent): void {
-  let entity = JobParamsEventEntity.load(event.params.id.toHex())
+  let entity = JobInfoEventEntity.load(event.params.id.toHex())
 
   // Entities only exist after they have been saved to the store;
   // `null` checks allow to create entities on demand
   if (entity == null) {
-    entity = new JobParamsEventEntity(event.params.id.toHex())
+    entity = new JobInfoEventEntity(event.params.id.toHex())
   }
 
   entity.data = event.params.data;
