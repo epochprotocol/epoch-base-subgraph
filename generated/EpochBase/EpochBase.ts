@@ -213,6 +213,50 @@ export class EpochBase__jobInfoResult {
     map.set("value10", ethereum.Value.fromBoolean(this.value10));
     return map;
   }
+
+  getId(): BigInt {
+    return this.value0;
+  }
+
+  getName(): string {
+    return this.value1;
+  }
+
+  getCreatedTimestamp(): BigInt {
+    return this.value2;
+  }
+
+  getIsSmartContractWallet(): boolean {
+    return this.value3;
+  }
+
+  getJobType(): i32 {
+    return this.value4;
+  }
+
+  getInitTimestamp(): BigInt {
+    return this.value5;
+  }
+
+  getExecutionInterval(): BigInt {
+    return this.value6;
+  }
+
+  getNextExecutionDeadline(): BigInt {
+    return this.value7;
+  }
+
+  getStrictExecution(): boolean {
+    return this.value8;
+  }
+
+  getRunOnce(): boolean {
+    return this.value9;
+  }
+
+  getIsExpired(): boolean {
+    return this.value10;
+  }
 }
 
 export class EpochBase__jobParamsResult {
@@ -244,6 +288,26 @@ export class EpochBase__jobParamsResult {
     map.set("value3", ethereum.Value.fromFixedBytes(this.value3));
     map.set("value4", ethereum.Value.fromBytes(this.value4));
     return map;
+  }
+
+  getId(): BigInt {
+    return this.value0;
+  }
+
+  getInitiatorAddress(): Address {
+    return this.value1;
+  }
+
+  getExecutionContract(): Address {
+    return this.value2;
+  }
+
+  getFunctionSignature(): Bytes {
+    return this.value3;
+  }
+
+  getData(): Bytes {
+    return this.value4;
   }
 }
 

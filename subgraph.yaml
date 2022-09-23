@@ -1,16 +1,17 @@
-specVersion: 0.0.2
+specVersion: 0.0.4
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: EpochBase
-    network: mainnet
+    network: mumbai
     source:
-      address: "0xc6845a5c768bf8d7681249f8927877efda425baf"
+      address: "0x9fe71a9eB3147f10b71686127FfDc20194c2aBdb"
       abi: EpochBase
+      startBlock: 28222701
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - ExpireJobEvent
@@ -33,3 +34,29 @@ dataSources:
         - event: MetaTransactionExecuted(address,address,bytes)
           handler: handleMetaTransactionExecuted
       file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: WalletRegistry
+    network: mumbai
+    source:
+      address: "0xd64ce90C190F4Ec06406c588a84c2Ed994790795"
+      abi: WalletRegistry
+      startBlock: 28222701
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - ActiveWalletChangedEvent
+        - OwnershipTransferred
+        - WalletCreatedEvent
+      abis:
+        - name: WalletRegistry
+          file: ./abis/WalletRegistry.json
+      eventHandlers:
+        - event: ActiveWalletChangedEvent(indexed address,indexed address,indexed uint8)
+          handler: handleActiveWalletChangedEvent
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: WalletCreatedEvent(indexed address,indexed address,indexed uint8)
+          handler: handleWalletCreatedEvent
+      file: ./src/mapping2.ts

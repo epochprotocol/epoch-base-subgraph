@@ -26,3 +26,17 @@ type JobExecutionStatusEntity @entity {
   success: Boolean
   nextExecution: BigInt 
 }
+
+type WalletEntity @entity {
+  id: ID!
+  walletId: BigInt!
+  walletAddress: Bytes! # address
+  owner: UserEntity
+}
+
+type UserEntity @entity {
+  id: ID!
+  address: Bytes
+  activeWallet: WalletEntity
+  wallets: [WalletEntity!]
+}

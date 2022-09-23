@@ -6,7 +6,6 @@ import {
   Value,
   ValueKind,
   store,
-  Address,
   Bytes,
   BigInt,
   BigDecimal
@@ -20,22 +19,25 @@ export class JobInfoEventEntity extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save JobInfoEventEntity entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save JobInfoEventEntity entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("JobInfoEventEntity", id.toString(), this);
+    assert(id != null, "Cannot save JobInfoEventEntity entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type JobInfoEventEntity must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("JobInfoEventEntity", id.toString(), this);
+    }
   }
 
   static load(id: string): JobInfoEventEntity | null {
-    return store.get("JobInfoEventEntity", id) as JobInfoEventEntity | null;
+    return changetype<JobInfoEventEntity | null>(
+      store.get("JobInfoEventEntity", id)
+    );
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
@@ -44,7 +46,7 @@ export class JobInfoEventEntity extends Entity {
 
   get executionInterval(): BigInt | null {
     let value = this.get("executionInterval");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -52,16 +54,16 @@ export class JobInfoEventEntity extends Entity {
   }
 
   set executionInterval(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("executionInterval");
     } else {
-      this.set("executionInterval", Value.fromBigInt(value as BigInt));
+      this.set("executionInterval", Value.fromBigInt(<BigInt>value));
     }
   }
 
   get strictExecution(): boolean {
     let value = this.get("strictExecution");
-    return value.toBoolean();
+    return value!.toBoolean();
   }
 
   set strictExecution(value: boolean) {
@@ -70,7 +72,7 @@ export class JobInfoEventEntity extends Entity {
 
   get jobInfoData(): Bytes | null {
     let value = this.get("jobInfoData");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -78,10 +80,10 @@ export class JobInfoEventEntity extends Entity {
   }
 
   set jobInfoData(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("jobInfoData");
     } else {
-      this.set("jobInfoData", Value.fromBytes(value as Bytes));
+      this.set("jobInfoData", Value.fromBytes(<Bytes>value));
     }
   }
 }
@@ -94,25 +96,25 @@ export class JobParamsEventEntity extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(
-      id !== null,
-      "Cannot save JobParamsEventEntity entity without an ID"
-    );
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save JobParamsEventEntity entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("JobParamsEventEntity", id.toString(), this);
+    assert(id != null, "Cannot save JobParamsEventEntity entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type JobParamsEventEntity must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("JobParamsEventEntity", id.toString(), this);
+    }
   }
 
   static load(id: string): JobParamsEventEntity | null {
-    return store.get("JobParamsEventEntity", id) as JobParamsEventEntity | null;
+    return changetype<JobParamsEventEntity | null>(
+      store.get("JobParamsEventEntity", id)
+    );
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
@@ -121,7 +123,7 @@ export class JobParamsEventEntity extends Entity {
 
   get initiatorAddress(): Bytes | null {
     let value = this.get("initiatorAddress");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -129,16 +131,16 @@ export class JobParamsEventEntity extends Entity {
   }
 
   set initiatorAddress(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("initiatorAddress");
     } else {
-      this.set("initiatorAddress", Value.fromBytes(value as Bytes));
+      this.set("initiatorAddress", Value.fromBytes(<Bytes>value));
     }
   }
 
   get executionContract(): Bytes | null {
     let value = this.get("executionContract");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -146,16 +148,16 @@ export class JobParamsEventEntity extends Entity {
   }
 
   set executionContract(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("executionContract");
     } else {
-      this.set("executionContract", Value.fromBytes(value as Bytes));
+      this.set("executionContract", Value.fromBytes(<Bytes>value));
     }
   }
 
   get functionSignature(): Bytes | null {
     let value = this.get("functionSignature");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -163,16 +165,16 @@ export class JobParamsEventEntity extends Entity {
   }
 
   set functionSignature(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("functionSignature");
     } else {
-      this.set("functionSignature", Value.fromBytes(value as Bytes));
+      this.set("functionSignature", Value.fromBytes(<Bytes>value));
     }
   }
 
   get tokensInvolved(): string | null {
     let value = this.get("tokensInvolved");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -180,16 +182,16 @@ export class JobParamsEventEntity extends Entity {
   }
 
   set tokensInvolved(value: string | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("tokensInvolved");
     } else {
-      this.set("tokensInvolved", Value.fromString(value as string));
+      this.set("tokensInvolved", Value.fromString(<string>value));
     }
   }
 
   get data(): Bytes | null {
     let value = this.get("data");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -197,10 +199,10 @@ export class JobParamsEventEntity extends Entity {
   }
 
   set data(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("data");
     } else {
-      this.set("data", Value.fromBytes(value as Bytes));
+      this.set("data", Value.fromBytes(<Bytes>value));
     }
   }
 }
@@ -214,27 +216,27 @@ export class JobExecutionEventEntity extends Entity {
   save(): void {
     let id = this.get("id");
     assert(
-      id !== null,
+      id != null,
       "Cannot save JobExecutionEventEntity entity without an ID"
     );
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save JobExecutionEventEntity entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("JobExecutionEventEntity", id.toString(), this);
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type JobExecutionEventEntity must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("JobExecutionEventEntity", id.toString(), this);
+    }
   }
 
   static load(id: string): JobExecutionEventEntity | null {
-    return store.get(
-      "JobExecutionEventEntity",
-      id
-    ) as JobExecutionEventEntity | null;
+    return changetype<JobExecutionEventEntity | null>(
+      store.get("JobExecutionEventEntity", id)
+    );
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
@@ -243,7 +245,7 @@ export class JobExecutionEventEntity extends Entity {
 
   get isExpired(): boolean {
     let value = this.get("isExpired");
-    return value.toBoolean();
+    return value!.toBoolean();
   }
 
   set isExpired(value: boolean) {
@@ -252,7 +254,7 @@ export class JobExecutionEventEntity extends Entity {
 
   get data(): Bytes | null {
     let value = this.get("data");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -260,16 +262,16 @@ export class JobExecutionEventEntity extends Entity {
   }
 
   set data(value: Bytes | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("data");
     } else {
-      this.set("data", Value.fromBytes(value as Bytes));
+      this.set("data", Value.fromBytes(<Bytes>value));
     }
   }
 
   get jobExecutionStatus(): Array<string> | null {
     let value = this.get("jobExecutionStatus");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toStringArray();
@@ -277,12 +279,12 @@ export class JobExecutionEventEntity extends Entity {
   }
 
   set jobExecutionStatus(value: Array<string> | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("jobExecutionStatus");
     } else {
       this.set(
         "jobExecutionStatus",
-        Value.fromStringArray(value as Array<string>)
+        Value.fromStringArray(<Array<string>>value)
       );
     }
   }
@@ -297,27 +299,27 @@ export class JobExecutionStatusEntity extends Entity {
   save(): void {
     let id = this.get("id");
     assert(
-      id !== null,
+      id != null,
       "Cannot save JobExecutionStatusEntity entity without an ID"
     );
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save JobExecutionStatusEntity entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("JobExecutionStatusEntity", id.toString(), this);
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type JobExecutionStatusEntity must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("JobExecutionStatusEntity", id.toString(), this);
+    }
   }
 
   static load(id: string): JobExecutionStatusEntity | null {
-    return store.get(
-      "JobExecutionStatusEntity",
-      id
-    ) as JobExecutionStatusEntity | null;
+    return changetype<JobExecutionStatusEntity | null>(
+      store.get("JobExecutionStatusEntity", id)
+    );
   }
 
   get id(): string {
     let value = this.get("id");
-    return value.toString();
+    return value!.toString();
   }
 
   set id(value: string) {
@@ -326,7 +328,7 @@ export class JobExecutionStatusEntity extends Entity {
 
   get success(): boolean {
     let value = this.get("success");
-    return value.toBoolean();
+    return value!.toBoolean();
   }
 
   set success(value: boolean) {
@@ -335,7 +337,7 @@ export class JobExecutionStatusEntity extends Entity {
 
   get nextExecution(): BigInt | null {
     let value = this.get("nextExecution");
-    if (value === null || value.kind == ValueKind.NULL) {
+    if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -343,10 +345,160 @@ export class JobExecutionStatusEntity extends Entity {
   }
 
   set nextExecution(value: BigInt | null) {
-    if (value === null) {
+    if (!value) {
       this.unset("nextExecution");
     } else {
-      this.set("nextExecution", Value.fromBigInt(value as BigInt));
+      this.set("nextExecution", Value.fromBigInt(<BigInt>value));
+    }
+  }
+}
+
+export class WalletEntity extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save WalletEntity entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type WalletEntity must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("WalletEntity", id.toString(), this);
+    }
+  }
+
+  static load(id: string): WalletEntity | null {
+    return changetype<WalletEntity | null>(store.get("WalletEntity", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get walletId(): BigInt {
+    let value = this.get("walletId");
+    return value!.toBigInt();
+  }
+
+  set walletId(value: BigInt) {
+    this.set("walletId", Value.fromBigInt(value));
+  }
+
+  get walletAddress(): Bytes {
+    let value = this.get("walletAddress");
+    return value!.toBytes();
+  }
+
+  set walletAddress(value: Bytes) {
+    this.set("walletAddress", Value.fromBytes(value));
+  }
+
+  get owner(): string | null {
+    let value = this.get("owner");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set owner(value: string | null) {
+    if (!value) {
+      this.unset("owner");
+    } else {
+      this.set("owner", Value.fromString(<string>value));
+    }
+  }
+}
+
+export class UserEntity extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save UserEntity entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type UserEntity must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("UserEntity", id.toString(), this);
+    }
+  }
+
+  static load(id: string): UserEntity | null {
+    return changetype<UserEntity | null>(store.get("UserEntity", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get address(): Bytes | null {
+    let value = this.get("address");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set address(value: Bytes | null) {
+    if (!value) {
+      this.unset("address");
+    } else {
+      this.set("address", Value.fromBytes(<Bytes>value));
+    }
+  }
+
+  get activeWallet(): string | null {
+    let value = this.get("activeWallet");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set activeWallet(value: string | null) {
+    if (!value) {
+      this.unset("activeWallet");
+    } else {
+      this.set("activeWallet", Value.fromString(<string>value));
+    }
+  }
+
+  get wallets(): Array<string> | null {
+    let value = this.get("wallets");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set wallets(value: Array<string> | null) {
+    if (!value) {
+      this.unset("wallets");
+    } else {
+      this.set("wallets", Value.fromStringArray(<Array<string>>value));
     }
   }
 }
