@@ -6,9 +6,9 @@ dataSources:
     name: EpochBase
     network: mumbai
     source:
-      address: "0x9fe71a9eB3147f10b71686127FfDc20194c2aBdb"
+      address: "0x367FFb9F95de776E9A91E43E92d27d7D8Bd6B48F"
       abi: EpochBase
-      startBlock: 28222701
+      startBlock: 28278450
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -39,9 +39,9 @@ dataSources:
     name: WalletRegistry
     network: mumbai
     source:
-      address: "0xd64ce90C190F4Ec06406c588a84c2Ed994790795"
+      address: "0x8E67D30d90128ECfbc0BFd4c21d86C880ECdcAFa"
       abi: WalletRegistry
-      startBlock: 28222701
+      startBlock: 28278450
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
